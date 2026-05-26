@@ -3,19 +3,15 @@ package model;
 /* criando classe de usuarios */
 
 
-public class Usuarios {
+public class Usuario {
     private int id_usuario;
     private String nome;
     private String email;
     private String senha;
 
 
-    public Usuarios(){
-    }
-
-
     /* modo construtor */
-    public Usuarios(int id_usuario, String nome, String email, String senha){
+    public Usuario(int id_usuario, String nome, String email, String senha){
 
         this.id_usuario = id_usuario;
         this.nome = nome;

@@ -2,19 +2,16 @@ package model;
 
 /* criando classe de livros */
 
-public class Livros {
+public class Livro {
     private int id_livro;
     private String titulo;
     private int id_categoria;
     private int id_autor;
 
-    public Livros() {
-    }
 
+    /* metodo contrutor */
 
-    /* modo contrutor */
-
-    public Livros(int id_livros, String titulo, int id_categoria, int id_autor){
+    public Livro(int id_livros, String titulo, int id_categoria, int id_autor){
 
         this.id_livro = id_livros;
         this.titulo = titulo;
