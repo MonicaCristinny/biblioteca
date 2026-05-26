@@ -1,1 +1,4 @@
-aaaaaaaaaaaaaaaaaa
+package app;
+
+public class Main {
+}
