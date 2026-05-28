@@ -1,6 +1,6 @@
 package database;
 
-import model.Livro;
+import model.Livros; // Importando no plural baseado no modelo de vocês
 import database.Database.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,8 +11,8 @@ import java.util.List;
 
 public class LivroDAO {
 
-    // parte de "salvar"
-    public boolean salvar(Livro livro) {
+    // Salvar usando a classe no plural
+    public boolean salvar(Livros livro) {
         String sql = "INSERT INTO livro (titulo, id_categoria, id_autor) VALUES (?, ?, ?)";
 
         try (Connection conn = Conexao.conectar();
@@ -31,9 +31,9 @@ public class LivroDAO {
         }
     }
 
-    // parte de "lista" livros
-    public List<Livro> listarTodos() {
-        List<Livro> livros = new ArrayList<>();
+    // Retorna uma lista de Livros (no plural)
+    public List<Livros> listarTodos() {
+        List<Livros> livrosLista = new ArrayList<>();
         String sql = "SELECT * FROM livro";
 
         try (Connection conn = Conexao.conectar();
@@ -41,54 +41,55 @@ public class LivroDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Livro livro = new Livro(
+                // CORREÇÃO DA LINHA 46: Chamando o construtor correto 'Livros'
+                Livros livro = new Livros(
                         rs.getInt("id_livro"),
                         rs.getString("titulo"),
                         rs.getInt("id_categoria"),
-                        rs.getInt("id_autor")
+                        rs.getInt("id_autor"),
+                        rs.getString("status")
                 );
-                livros.add(livro);
+                livrosLista.add(livro);
             }
         } catch (SQLException e) {
             System.out.println("Erro ao listar livros.");
             e.printStackTrace();
         }
-        return livros;
+        return livrosLista;
     }
 
-    // parte de "filtrar" pelo nome
-    public List<Livro> buscarPorNome(String nomeBusca) {
-        List<Livro> livros = new ArrayList<>();
+    // Busca filtrada retornando List<Livros>
+    public List<Livros> buscarPorNome(String nomeBusca) {
+        List<Livros> livrosLista = new ArrayList<>();
         String sql = "SELECT * FROM livro WHERE titulo LIKE ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // O "%" faz o MySQL buscar qualquer livro que contenha aquela palavra no título
             stmt.setString(1, "%" + nomeBusca + "%");
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Livro livro = new Livro(
+                    // CORREÇÃO DA LINHA 74: Chamando o construtor correto 'Livros'
+                    Livros livro = new Livros(
                             rs.getInt("id_livro"),
                             rs.getString("titulo"),
                             rs.getInt("id_categoria"),
-                            rs.getInt("id_autor")
+                            rs.getInt("id_autor"),
+                            rs.getString("status")
                     );
-                    livros.add(livro);
+                    livrosLista.add(livro);
                 }
             }
         } catch (SQLException e) {
             System.out.println("Erro ao buscar livro por nome.");
             e.printStackTrace();
         }
-        return livros;
+        return livrosLista;
     }
 
-    // parte de "excluir"
     public boolean excluir(int idLivro) {
         String sql = "DELETE FROM livro WHERE id_livro = ?";
-
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 

@@ -3,9 +3,9 @@ package controller;
 import database.AutorDAO;
 import database.CategoriaDAO;
 import database.LivroDAO;
-import model.Autor;
-import model.Categoria;
-import model.Livro;
+import model.Autores;
+import model.Categorias;
+import model.Livros;
 import java.util.List;
 
 public class LivroController {
@@ -20,16 +20,16 @@ public class LivroController {
         this.categoriaDAO = new CategoriaDAO();
     }
 
-    public List<Autor> listarAutores() {
+    public List<Autores> listarAutores() {
         return autorDAO.listarTodos();
     }
 
-    public List<Categoria> listarCategorias(){
+    public List<Categorias> listarCategorias(){
         return categoriaDAO.listarTodas();
     }
 
     // botao pesquisa
-    public List<Livro> pesquisarLivros(String titulo) {
+    public List<Livros> pesquisarLivros(String titulo) {
         if (titulo == null || titulo.trim().isEmpty()) {
             return livroDAO.listarTodos();
         }
@@ -37,12 +37,12 @@ public class LivroController {
     }
 
     // botao cadastrar
-    public boolean cadastrarNovoLivro(String titulo, int idCategoria, int idAutor) {
+    public boolean cadastrarNovoLivro(String titulo, int idCategoria, int idAutor, String status) {
         if (titulo.isEmpty() || idCategoria <= 0 || idAutor <= 0) {
             return false;
         }
         // Passa 0 no ID porque o MySQL gera o ID automaticamente (AUTO_INCREMENT)
-        Livro livro = new Livro(0, titulo, idCategoria, idAutor);
+        Livros livro = new Livros(0, titulo, idCategoria, idAutor, status);
         return livroDAO.salvar(livro);
     }
 

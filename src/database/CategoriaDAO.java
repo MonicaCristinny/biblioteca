@@ -1,7 +1,7 @@
 package database;
 
 import database.Database.Conexao;
-import model.Categoria;
+import model.Categorias;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,8 +12,8 @@ import java.util.List;
 
 public class CategoriaDAO {
 
-    public List<Categoria> listarTodas(){
-        List<Categoria> categorias = new ArrayList<>();
+    public List<Categorias> listarTodas(){
+        List<Categorias> categorias = new ArrayList<>();
         String sql = "SELECT * FROM categoria ORDER BY nome ASC";
 
         try (Connection conn = Conexao.conectar();
@@ -21,7 +21,7 @@ public class CategoriaDAO {
              ResultSet rs = stmt.executeQuery()){
 
             while (rs.next()){
-                Categoria categoria = new Categoria(
+                Categorias categoria = new Categorias(
                         rs.getInt("id_categoria"),
                         rs.getString("nome")
                 );

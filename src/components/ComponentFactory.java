@@ -14,7 +14,7 @@ public class ComponentFactory {
     }
 
     public static TextField criarCampo(String textoCampo){
-        TextField campo = new TextField("textoCampo");
+        TextField campo = new TextField();
 
         campo.setPromptText(textoCampo);
 

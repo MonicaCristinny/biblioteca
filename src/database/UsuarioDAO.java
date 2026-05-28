@@ -1,16 +1,17 @@
 package database;
 
-import model.Usuario;
+import model.Usuarios;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import database.Database.Conexao;
+import model.Usuarios;
 
 public class UsuarioDAO {
 
     // verifica se o usuario existe
-    public Usuario validarLogin(String email, String senha) {
+    public Usuarios validarLogin(String email, String senha) {
 
         String sql = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
 
@@ -22,7 +23,7 @@ public class UsuarioDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Usuario(
+                    return new Usuarios(
                             rs.getInt("id_usuario"),
                             rs.getString("nome"),
                             rs.getString("email"),

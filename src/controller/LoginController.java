@@ -2,7 +2,7 @@ package controller;
 
 import view.LoginView;
 import database.UsuarioDAO;
-import model.Usuario;
+import model.Usuarios;
 import javafx.scene.control.Alert;
 
 public class LoginController {
@@ -19,7 +19,7 @@ public class LoginController {
     }
 
     private void handleEntrar() {
-        String emailDigitado = view.getUsuario();
+        String emailDigitado = view.getEmail();
         String senhaDigitada = view.getSenha();
 
         if (emailDigitado.isEmpty() || java.util.Objects.isNull(senhaDigitada) || senhaDigitada.isEmpty()) {
@@ -27,7 +27,7 @@ public class LoginController {
             return;
         }
 
-        Usuario usuarioLogado = usuarioDAO.validarLogin(emailDigitado, senhaDigitada);
+        Usuarios usuarioLogado = usuarioDAO.validarLogin(emailDigitado, senhaDigitada);
 
         if (usuarioLogado != null) {
             exibirAlerta("Sucesso", "Bem-vindo(a), " + usuarioLogado.getNome() + "!");
