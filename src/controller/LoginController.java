@@ -1,35 +1,51 @@
 package controller;
 
 import view.LoginView;
+import database.UsuarioDAO;
+import model.Usuario;
 import javafx.scene.control.Alert;
 
 public class LoginController {
 
     private LoginView view;
-    public LoginController(LoginView view){
+    private UsuarioDAO usuarioDAO;
+
+    public LoginController(LoginView view) {
         this.view = view;
+        this.usuarioDAO = new UsuarioDAO();
 
         this.view.getBtnEntrar().setOnAction(event -> handleEntrar());
         this.view.getBtnCadastrar().setOnAction(event -> handleCadastrar());
     }
 
-    private void handleEntrar(){
-        String usuario = view.getUsuario();
-        String senha = view.getSenha();
+    private void handleEntrar() {
+        String emailDigitado = view.getUsuario();
+        String senhaDigitada = view.getSenha();
 
-        if (usuario.isEmpty() || senha.isEmpty()) {
-            exibirAlerta("Campos Vazios", "Por favor, preencha o usuário e a senha.");
+        if (emailDigitado.isEmpty() || java.util.Objects.isNull(senhaDigitada) || senhaDigitada.isEmpty()) {
+            exibirAlerta("Campos Vazios", "Por favor, preencha o e-mail e a senha.");
             return;
         }
 
-        // Ponto de Teste Temporário: Como ainda não conectamos o Banco de Dados,
-        // vamos criar um usuário "admin" estático apenas para testar se a nossa tela funciona.
-        if (usuario.equals("admin") && senha.equals("1234")) {
-            exibirAlerta("Sucesso", "Login efetuado com sucesso!");
+        Usuario usuarioLogado = usuarioDAO.validarLogin(emailDigitado, senhaDigitada);
 
-            // Futuramente, colocaremos aqui o código para fechar essa tela
-            // e abrir a tela principal de livros (LivroView).
+        if (usuarioLogado != null) {
+            exibirAlerta("Sucesso", "Bem-vindo(a), " + usuarioLogado.getNome() + "!");
+
         } else {
-            exibirAlerta("Erro de Autenticação", "Usuário ou senha incorretos.");
+            exibirAlerta("Erro de Autenticação", "E-mail ou senha incorretos.");
+        }
+    }
+
+    private void handleCadastrar() {
+        exibirAlerta("Cadastro", "A tela de cadastro utilizará o modelo da classe Usuario.");
+    }
+
+    private void exibirAlerta(String titulo, String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 }
