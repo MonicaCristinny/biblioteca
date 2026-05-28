@@ -7,7 +7,7 @@ public class Livro {
     private String titulo;
     private int id_categoria;
     private int id_autor;
-    private enum status;
+    private String status;
 
 
     /* metodo contrutor */

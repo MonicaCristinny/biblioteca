@@ -1,26 +1,30 @@
 package app;
 
+import controller.LoginController;
+import view.LoginView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import view.LoginView;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage primaryStage) {
+        LoginView loginView = new LoginView();
+        LoginController loginController = new LoginController(loginView);
 
-        LoginView view = new LoginView(stage);
+        Scene cena = new Scene(loginView);
 
-        Scene scene = new Scene(view.getView(), 400, 300);
+        try {
+            cena.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+        } catch (Exception e) {
+            System.out.println("Aviso: Arquivo style.css não encontrado ou vazio. Carregando layout padrão.");
+        }
 
-        scene.getStylesheets().add(
-                getClass().getResource("/style/login.css").toExternalForm()
-        );
-
-        stage.setTitle("Login");
-        stage.setScene(scene);
-        stage.show();
+        primaryStage.setTitle("Sistema de Biblioteca ABA - Login");
+        primaryStage.setScene(cena);
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
