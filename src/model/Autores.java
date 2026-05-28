@@ -1,13 +1,13 @@
 package model;
 
-public class Autor {
+public class Autores {
     private int id_autor;
     private String nome;
 
 
 
     //como se fosse o def init
-    public Autor(int id_autor, String nome){
+    public Autores(int id_autor, String nome){
         this.id_autor = id_autor;
         this.nome = nome;
     }

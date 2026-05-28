@@ -1,10 +1,10 @@
 package model;
 
-public class Categoria {
+public class Categorias {
     private int id_categoria;
     private String nome;
 
-    public Categoria(int id_categoria, String nome){
+    public Categorias(int id_categoria, String nome){
         this.id_categoria = id_categoria;
         this.nome = nome;
     }

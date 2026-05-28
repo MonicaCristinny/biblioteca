@@ -2,22 +2,24 @@ package model;
 
 /* criando classe de livros */
 
-public class Livro {
+public class Livros {
     private int id_livro;
     private String titulo;
     private int id_categoria;
     private int id_autor;
-    private enum status;
+    private String status;
 
 
     /* metodo contrutor */
 
-    public Livro(int id_livros, String titulo, int id_categoria, int id_autor){
+    public Livros(int id_livros, String titulo, int id_categoria, int id_autor, String status){
 
         this.id_livro = id_livros;
         this.titulo = titulo;
         this.id_categoria = id_categoria;
         this.id_autor = id_autor;
+        this.status = status;
+
 
     }
 
@@ -54,5 +56,13 @@ public class Livro {
     public void setId_autor(int id_autor) {
         this.id_autor = id_autor;
     }
+
+    public String getStatus(){
+        return status;
+    }
+    public void setStatus(){
+        this.status = status;
+    }
+
 }
 
