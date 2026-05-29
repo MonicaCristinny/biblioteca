@@ -4,6 +4,9 @@ import view.LoginView;
 import database.UsuarioDAO;
 import model.Usuarios;
 import javafx.scene.control.Alert;
+import view.CadastroView;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class LoginController {
 
@@ -31,14 +34,27 @@ public class LoginController {
 
         if (usuarioLogado != null) {
             exibirAlerta("Sucesso", "Bem-vindo(a), " + usuarioLogado.getNome() + "!");
-
         } else {
             exibirAlerta("Erro de Autenticação", "E-mail ou senha incorretos.");
         }
     }
 
+    // muda pra tela de cadastro
     private void handleCadastrar() {
-        exibirAlerta("Cadastro", "A tela de cadastro utilizará o modelo da classe Usuario.");
+        CadastroView cadastroView = new CadastroView();
+        CadastroController cadastroController = new CadastroController(cadastroView);
+        Scene novaCena = new Scene(cadastroView);
+
+        try {
+            novaCena.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+        } catch (Exception e) {
+            System.out.println("Aviso: CSS não encontrado para a tela de cadastro.");
+        }
+
+        Stage janelaAtual = (Stage) view.getScene().getWindow();
+
+        janelaAtual.setTitle("Sistema de Biblioteca ABA - Cadastrar Usuário");
+        janelaAtual.setScene(novaCena);
     }
 
     private void exibirAlerta(String titulo, String mensagem) {

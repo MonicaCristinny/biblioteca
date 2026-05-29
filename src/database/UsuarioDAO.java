@@ -38,4 +38,26 @@ public class UsuarioDAO {
         }
         return null;
     }
+
+    public boolean salvar(Usuarios usuario) {
+        String sql = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuario.getNome());
+            stmt.setString(2, usuario.getEmail());
+            stmt.setString(3, usuario.getSenha());
+
+            int linhasAfetadas = stmt.executeUpdate();
+
+            return linhasAfetadas > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao salvar o novo usuário no MySQL.");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
