@@ -1,7 +1,10 @@
 package controller;
 
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 import model.Livros;
+import view.BibliotecaView;
 import view.CadastrarLivroView;
 import database.LivroDAO;
 import database.AutorDAO;
@@ -20,6 +23,8 @@ public class CadastrarLivroController {
         this.categoriaDAO = new CategoriaDAO();
 
         this.view.getBtnSalvar().setOnAction(e -> handlesalvar());
+
+        this.view.getBtnVoltar().setOnAction(e -> handleVoltar());
     }
 
     public void handlesalvar() {
@@ -57,6 +62,26 @@ public class CadastrarLivroController {
             e.printStackTrace();
             exibirAlerta("Erro de Sistema", "Não foi possível realizar a operação.");
         }
+    }
+
+    private void handleVoltar() {
+        // Cria a tela principal
+        BibliotecaView bibliotecaView = new BibliotecaView();
+        BibliotecaController bibliotecaController = new BibliotecaController(bibliotecaView);
+
+        // Prepara a cena com os estilos
+        Scene cenaBiblioteca = new Scene(bibliotecaView);
+        try {
+            cenaBiblioteca.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+        } catch (Exception e) {
+            System.out.println("Aviso: CSS não encontrado ao retornar para a biblioteca.");
+        }
+
+        // Pega a janela (Stage) atual e substitui a cena
+        Stage janelaAtual = (Stage) view.getScene().getWindow();
+        janelaAtual.setTitle("Sistema de Biblioteca ABA - Gerenciamento de Acervo");
+        janelaAtual.setScene(cenaBiblioteca);
+        janelaAtual.centerOnScreen();
     }
 
     private void exibirAlerta(String titulo, String mensagem) {
