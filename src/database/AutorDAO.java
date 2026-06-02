@@ -33,13 +33,14 @@ public class AutorDAO {
         }
         return lista;
     }
-
     public int obterOuCadastrarAutor(String nomeAutor) {
         if (nomeAutor == null || nomeAutor.trim().isEmpty()) {
             return 0;
         }
+
         nomeAutor = nomeAutor.trim();
 
+        // 1. Busca se o autor já existe (Case-Insensitive)
         String sqlBuscar = "SELECT id_autor FROM autores WHERE LOWER(nome) = LOWER(?)";
 
         try (Connection conn = Database.Conexao.conectar();
@@ -48,11 +49,11 @@ public class AutorDAO {
             stmt.setString(1, nomeAutor);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt("id_autor"); // Encontrou o autor cadastrado!
+                    return rs.getInt("id_autor");
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao buscar autor (Case Insensitive).");
+            System.err.println("Erro ao buscar autor no banco:");
             e.printStackTrace();
         }
 
@@ -62,15 +63,17 @@ public class AutorDAO {
              PreparedStatement stmt = conn.prepareStatement(sqlInserir, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, nomeAutor);
-            stmt.executeUpdate();
+            int linhasAfetadas = stmt.executeUpdate();
 
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
+            if (linhasAfetadas > 0) {
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1);
+                    }
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao cadastrar novo autor.");
+            System.err.println("Erro ao inserir novo autor no banco:");
             e.printStackTrace();
         }
 

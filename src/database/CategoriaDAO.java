@@ -49,11 +49,11 @@ public class CategoriaDAO {
             stmt.setString(1, nomeCategoria);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt("id_categoria"); // Encontrou a categoria cadastrada!
+                    return rs.getInt("id_categoria"); // Achou a categoria, retorna o ID
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao buscar categoria (Case Insensitive).");
+            System.err.println("Erro ao buscar categoria no banco:");
             e.printStackTrace();
         }
 
@@ -63,15 +63,17 @@ public class CategoriaDAO {
              PreparedStatement stmt = conn.prepareStatement(sqlInserir, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, nomeCategoria);
-            stmt.executeUpdate();
+            int linhasAfetadas = stmt.executeUpdate();
 
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
+            if (linhasAfetadas > 0) {
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1); // Retorna o ID gerado
+                    }
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao cadastrar nova categoria.");
+            System.err.println("Erro ao inserir nova categoria no banco:");
             e.printStackTrace();
         }
 
