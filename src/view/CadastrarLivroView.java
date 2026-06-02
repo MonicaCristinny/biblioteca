@@ -9,9 +9,7 @@ import components.ComponentFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-
-
-public class CadastrarLivroView extends VBox{
+public class CadastrarLivroView extends VBox {
 
     private TextField txtTitulo = new TextField();
     private TextField txtCategoria = new TextField();
@@ -49,15 +47,14 @@ public class CadastrarLivroView extends VBox{
         txtStatus = ComponentFactory.criarCampo("Digite o estado do livro");
         boxStatus.getChildren().addAll(lblStatus, txtStatus);
 
-        HBox boxBotoes = new HBox();
+        HBox boxBotoes = new HBox(15);
+        boxBotoes.setAlignment(Pos.CENTER);
         btnSalvar = ComponentFactory.criarBotao("Salvar", 120);
         btnVoltar = ComponentFactory.criarBotao("Voltar", 120);
         boxBotoes.getChildren().addAll(btnSalvar, btnVoltar);
 
-        boxBotoes.getChildren().addAll(btnSalvar, btnVoltar);
         this.getChildren().addAll(TituloInicio, boxTitulo, boxCategoria, boxAutor, boxStatus, boxBotoes);
-
-        }
+    }
 
     public String getTitulo() { return txtTitulo.getText(); }
     public String getCategoria() { return txtCategoria.getText(); }
@@ -66,4 +63,3 @@ public class CadastrarLivroView extends VBox{
     public Button getBtnSalvar() { return btnSalvar; }
     public Button getBtnVoltar() { return btnVoltar; }
 }
-

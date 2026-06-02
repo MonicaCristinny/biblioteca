@@ -6,15 +6,12 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import model.Livros;
 import view.BibliotecaView;
-
 import java.util.List;
 
 public class BibliotecaController {
 
     private BibliotecaView view;
     private LivroDAO livroDAO;
-
-    // atualiza a tabela automaticamente
     private ObservableList<Livros> livrosObservableList;
 
     public BibliotecaController(BibliotecaView view) {
@@ -22,30 +19,23 @@ public class BibliotecaController {
         this.livroDAO = new LivroDAO();
         this.livrosObservableList = FXCollections.observableArrayList();
 
-        // Vincula a lista à tabela da View
         this.view.getTabelaLivros().setItems(livrosObservableList);
-
-        // Busca todos os livros
         this.atualizarTabela();
 
-        // Configura o clique dos
         this.view.getBtnPesquisar().setOnAction(event -> handlePesquisar());
         this.view.getBtnEmprestar().setOnAction(event -> handleEmprestar());
         this.view.getBtnDevolver().setOnAction(event -> handleDevolver());
         this.view.getBtnNovoLivro().setOnAction(event -> handleNovoLivro());
     }
 
-    //busca os livros
     private void atualizarTabela() {
         List<Livros> livrosDoBanco = livroDAO.listarTodos();
         livrosObservableList.clear();
         livrosObservableList.addAll(livrosDoBanco);
     }
 
-    // Ação do Botão Pesquisar
     private void handlePesquisar() {
         String termoBusca = view.getPesquisa();
-
         if (termoBusca == null || termoBusca.trim().isEmpty()) {
             atualizarTabela();
         } else {
@@ -55,38 +45,44 @@ public class BibliotecaController {
         }
     }
 
-    //Botão Emprestar
     private void handleEmprestar() {
         Livros livroSelecionado = view.getTabelaLivros().getSelectionModel().getSelectedItem();
-
         if (livroSelecionado == null) {
             exibirAlerta("Aviso", "Por favor, selecione um livro na tabela para emprestar.");
             return;
         }
-
         if ("Emprestado".equalsIgnoreCase(livroSelecionado.getStatus())) {
             exibirAlerta("Aviso", "Este livro já está emprestado!");
             return;
         }
-
-        exibirAlerta("Empréstimo", "Você selecionou o livro: " + livroSelecionado.getTitulo() + "\n(Lógica de alteração de status pode ser aplicada aqui).");
+        exibirAlerta("Empréstimo", "Você selecionou o livro: " + livroSelecionado.getTitulo());
     }
 
-    // Botão Devolver
     private void handleDevolver() {
         Livros livroSelecionado = view.getTabelaLivros().getSelectionModel().getSelectedItem();
-
         if (livroSelecionado == null) {
             exibirAlerta("Aviso", "Por favor, selecione um livro na tabela para devolver.");
             return;
         }
-
         exibirAlerta("Devolução", "Devolvendo o livro: " + livroSelecionado.getTitulo());
     }
 
-    // Botão Novo Livro
     private void handleNovoLivro() {
-        exibirAlerta("Novo Livro", "Aqui vocês podem abrir a tela 'CadastrarLivroView' que criaram!");
+        view.CadastrarLivroView cadastroLivroView = new view.CadastrarLivroView();
+
+        CadastrarLivroController cadastrarLivroController = new CadastrarLivroController(cadastroLivroView);
+
+        javafx.scene.Scene novaCena = new javafx.scene.Scene(cadastroLivroView);
+        try {
+            novaCena.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+        } catch (Exception e) {
+            System.out.println("Aviso: CSS não encontrado para a tela de cadastro de livros.");
+        }
+
+        javafx.stage.Stage janelaAtual = (javafx.stage.Stage) view.getScene().getWindow();
+        janelaAtual.setTitle("Sistema de Biblioteca ABA - Cadastrar Novo Livro");
+        janelaAtual.setScene(novaCena);
+        janelaAtual.centerOnScreen();
     }
 
     private void exibirAlerta(String titulo, String mensagem) {
