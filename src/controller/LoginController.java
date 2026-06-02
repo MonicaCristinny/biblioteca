@@ -1,5 +1,6 @@
 package controller;
 
+import view.BibliotecaView;
 import view.LoginView;
 import database.UsuarioDAO;
 import model.Usuarios;
@@ -35,7 +36,7 @@ public class LoginController {
         if (usuarioLogado != null) {
             exibirAlerta("Sucesso", "Bem-vindo(a), " + usuarioLogado.getNome() + "!");
 
-            view.BibliotecaView bibliotecaView = new view.BibliotecaView();
+            BibliotecaView bibliotecaView = new BibliotecaView();
 
             BibliotecaController bibliotecaController = new BibliotecaController(bibliotecaView);
 

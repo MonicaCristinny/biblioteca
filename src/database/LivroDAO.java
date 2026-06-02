@@ -1,6 +1,6 @@
 package database;
 
-import model.Livros; // Importando no plural baseado no modelo de vocês
+import model.Livros;
 import database.Database.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,6 @@ import java.util.List;
 
 public class LivroDAO {
 
-    // Salvar usando a classe no plural
     public boolean salvar(Livros livro) {
         String sql = "INSERT INTO livro (titulo, id_categoria, id_autor) VALUES (?, ?, ?)";
 
@@ -31,17 +30,15 @@ public class LivroDAO {
         }
     }
 
-    // Retorna uma lista de Livros (no plural)
     public List<Livros> listarTodos() {
         List<Livros> livrosLista = new ArrayList<>();
-        String sql = "SELECT * FROM livro";
+        String sql = "SELECT * FROM livros";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                // CORREÇÃO DA LINHA 46: Chamando o construtor correto 'Livros'
                 Livros livro = new Livros(
                         rs.getInt("id_livro"),
                         rs.getString("titulo"),

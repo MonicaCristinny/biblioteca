@@ -54,7 +54,7 @@ public class CadastrarLivroView extends VBox{
         btnVoltar = ComponentFactory.criarBotao("Voltar", 120);
         boxBotoes.getChildren().addAll(btnSalvar, btnVoltar);
 
-        boxBotoes.getChildren().addAll(btnSalvar, btnSalvar);
+        boxBotoes.getChildren().addAll(btnSalvar, btnVoltar);
         this.getChildren().addAll(TituloInicio, boxTitulo, boxCategoria, boxAutor, boxStatus, boxBotoes);
 
         }
