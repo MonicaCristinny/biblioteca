@@ -12,19 +12,22 @@ import java.util.List;
 public class LivroDAO {
 
     public boolean salvar(Livros livro) {
-        String sql = "INSERT INTO livro (titulo, id_categoria, id_autor) VALUES (?, ?, ?)";
+        // CORRIGIDO: de 'livro' para 'livros' (conforme seu banco de dados)
+        String sql = "INSERT INTO livros (titulo, id_categoria, id_autor, status) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = Conexao.conectar();
+        try (Connection conn = Database.Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, livro.getTitulo());
             stmt.setInt(2, livro.getId_categoria());
             stmt.setInt(3, livro.getId_autor());
+            stmt.setString(4, livro.getStatus());
 
-            stmt.executeUpdate();
-            return true;
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0; // Retorna true se salvou com sucesso
+
         } catch (SQLException e) {
-            System.out.println("Erro ao salvar livro no banco.");
+            System.err.println("Erro ao salvar livro no banco.");
             e.printStackTrace();
             return false;
         }
