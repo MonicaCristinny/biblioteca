@@ -13,7 +13,7 @@ public class LivroDAO {
 
     public boolean salvar(Livros livro) {
         // CORRIGIDO: de 'livro' para 'livros' (conforme seu banco de dados)
-        String sql = "INSERT INTO livros (titulo, id_categoria, id_autor, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO livros (titulo, id_categoria, id_autores, status) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = Database.Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
