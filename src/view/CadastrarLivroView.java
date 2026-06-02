@@ -14,9 +14,7 @@ public class CadastrarLivroView extends VBox {
     private TextField txtTitulo = new TextField();
     private TextField txtCategoria = new TextField();
     private TextField txtAutor = new TextField();
-    private TextField txtStatus = new TextField();
-    private Button btnSalvar = new Button();
-    private Button btnVoltar = new Button();
+    // REMOVIDO: txtStatus não é mais um atributo editável
 
     public CadastrarLivroView() {
         this.setAlignment(Pos.CENTER);
@@ -29,37 +27,39 @@ public class CadastrarLivroView extends VBox {
 
         VBox boxTitulo = new VBox(5);
         Label lblTitulo = ComponentFactory.criarTexto("Título:");
-        txtTitulo = ComponentFactory.criarCampo("Digite o titulo da obra");
+        txtTitulo = ComponentFactory.criarCampo("Digite o título da obra");
         boxTitulo.getChildren().addAll(lblTitulo, txtTitulo);
 
         VBox boxCategoria = new VBox(5);
-        Label lblCategoria = ComponentFactory.criarTexto("Categoria:");
-        txtCategoria = ComponentFactory.criarCampo("Digite a categoria");
+        Label lblCategoria = ComponentFactory.criarTexto("Categoria (Nome):");
+        txtCategoria = ComponentFactory.criarCampo("Ex: Romance, Terror, Ficção");
         boxCategoria.getChildren().addAll(lblCategoria, txtCategoria);
 
         VBox boxAutor = new VBox(5);
-        Label lblAutor = ComponentFactory.criarTexto("Autor:");
-        txtAutor = ComponentFactory.criarCampo("Digite o nome do autor");
+        Label lblAutor = ComponentFactory.criarTexto("Autor (Nome):");
+        txtAutor = ComponentFactory.criarCampo("Digite o nome completo do autor");
         boxAutor.getChildren().addAll(lblAutor, txtAutor);
 
-        VBox boxStatus = new VBox(5);
-        Label lblStatus = ComponentFactory.criarTexto("Status:");
-        txtStatus = ComponentFactory.criarCampo("Digite o estado do livro");
-        boxStatus.getChildren().addAll(lblStatus, txtStatus);
 
         HBox boxBotoes = new HBox(15);
         boxBotoes.setAlignment(Pos.CENTER);
-        btnSalvar = ComponentFactory.criarBotao("Salvar", 120);
-        btnVoltar = ComponentFactory.criarBotao("Voltar", 120);
+        Button btnSalvar = ComponentFactory.criarBotao("Salvar", 120);
+        Button btnVoltar = ComponentFactory.criarBotao("Voltar", 120);
+
+        this.btnSalvar = btnSalvar;
+        this.btnVoltar = btnVoltar;
+
         boxBotoes.getChildren().addAll(btnSalvar, btnVoltar);
 
-        this.getChildren().addAll(TituloInicio, boxTitulo, boxCategoria, boxAutor, boxStatus, boxBotoes);
+        this.getChildren().addAll(TituloInicio, boxTitulo, boxCategoria, boxAutor, boxBotoes);
     }
+
+    private Button btnSalvar;
+    private Button btnVoltar;
 
     public String getTitulo() { return txtTitulo.getText(); }
     public String getCategoria() { return txtCategoria.getText(); }
     public String getAutor() { return txtAutor.getText(); }
-    public String getStatus() { return txtStatus.getText(); }
     public Button getBtnSalvar() { return btnSalvar; }
     public Button getBtnVoltar() { return btnVoltar; }
 }

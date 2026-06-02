@@ -1,13 +1,15 @@
 package controller;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 import view.BibliotecaView;
 import view.LoginView;
 import database.UsuarioDAO;
 import model.Usuarios;
-import javafx.scene.control.Alert;
-import view.CadastroView;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 public class LoginController {
 
@@ -19,68 +21,75 @@ public class LoginController {
         this.usuarioDAO = new UsuarioDAO();
 
         this.view.getBtnEntrar().setOnAction(event -> handleEntrar());
-        this.view.getBtnCadastrar().setOnAction(event -> handleCadastrar());
     }
 
     private void handleEntrar() {
         String emailDigitado = view.getEmail();
         String senhaDigitada = view.getSenha();
 
-        if (emailDigitado.isEmpty() || java.util.Objects.isNull(senhaDigitada) || senhaDigitada.isEmpty()) {
-            exibirAlerta("Campos Vazios", "Por favor, preencha o e-mail e a senha.");
+        if (emailDigitado.isEmpty() || senhaDigitada.isEmpty()) {
+            exibirAlertaErro("Erro", "Por favor, preencha todos os campos.");
             return;
         }
 
-        Usuarios usuarioLogado = usuarioDAO.validarLogin(emailDigitado, senhaDigitada);
+        model.Usuarios usuarioLogado = usuarioDAO.validarLogin(emailDigitado, senhaDigitada);
 
         if (usuarioLogado != null) {
-            exibirAlerta("Sucesso", "Bem-vindo(a), " + usuarioLogado.getNome() + "!");
 
-            BibliotecaView bibliotecaView = new BibliotecaView();
-
-            BibliotecaController bibliotecaController = new BibliotecaController(bibliotecaView);
-
-            Scene novaCena = new Scene(bibliotecaView);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Bem-vindo");
+            alert.setHeaderText(null);
+            alert.setContentText("Login realizado com sucesso! Carregando acervo...");
 
             try {
-                novaCena.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+                alert.getDialogPane().getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+                alert.getDialogPane().getStyleClass().add("meu-alerta-customizado");
             } catch (Exception e) {
-                System.out.println("Aviso: CSS não encontrado para a biblioteca.");
+                System.out.println("Aviso: CSS do alerta não carregado.");
             }
 
-            Stage janelaAtual = (Stage) view.getScene().getWindow();
-            janelaAtual.setTitle("Sistema de Biblioteca ABA - Gerenciamento de Acervo");
-            janelaAtual.setScene(novaCena);
-            janelaAtual.centerOnScreen(); 
+            Timeline timeline = new Timeline(
+                    new KeyFrame(
+                            Duration.seconds(2),
+                            ae -> {
+                                alert.close();
+
+                                BibliotecaView bibliotecaView = new BibliotecaView();
+                                BibliotecaController bibliotecaController = new BibliotecaController(bibliotecaView);
+
+                                Scene cena = new Scene(bibliotecaView);
+                                try {
+                                    cena.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+                                } catch (Exception e) {
+                                    System.out.println("Aviso: CSS da biblioteca não encontrado.");
+                                }
+
+                                Stage stage = (Stage) view.getScene().getWindow();
+                                stage.setScene(cena);
+                                stage.setTitle("Sistema de Biblioteca ABA - Gerenciamento de Acervo");
+                                stage.centerOnScreen();
+                            }
+                    )
+            );
+            timeline.setCycleCount(1);
+            timeline.play();
+
+            alert.show();
 
         } else {
-            exibirAlerta("Erro de Autenticação", "E-mail ou senha incorretos.");
+            exibirAlertaErro("Erro de Autenticação", "E-mail ou senha incorretos.");
         }
     }
 
-    // muda pra tela de cadastro
-    private void handleCadastrar() {
-        CadastroView cadastroView = new CadastroView();
-        CadastroController cadastroController = new CadastroController(cadastroView);
-        Scene novaCena = new Scene(cadastroView);
-
-        try {
-            novaCena.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
-        } catch (Exception e) {
-            System.out.println("Aviso: CSS não encontrado para a tela de cadastro.");
-        }
-
-        Stage janelaAtual = (Stage) view.getScene().getWindow();
-
-        janelaAtual.setTitle("Sistema de Biblioteca ABA - Cadastrar Usuário");
-        janelaAtual.setScene(novaCena);
-    }
-
-    private void exibirAlerta(String titulo, String mensagem) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void exibirAlertaErro(String titulo, String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensagem);
+        try {
+            alert.getDialogPane().getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+        } catch (Exception e) {
+        }
         alert.showAndWait();
     }
 }

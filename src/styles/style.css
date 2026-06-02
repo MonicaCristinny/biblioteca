@@ -110,3 +110,36 @@
     -fx-background-color: #3498db;
     -fx-text-fill: white;
 }
+
+.dialog-pane {
+    -fx-background-color: #1e2730;
+}
+
+.dialog-pane .content {
+    -fx-text-fill: #ffffff; /* Texto branco */
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #2a3644;
+}
+.dialog-pane .header-panel .label {
+    -fx-text-fill: #3498db; /* Azul destacado */
+}
+
+.dialog-pane .button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.meu-alerta-customizado {
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
