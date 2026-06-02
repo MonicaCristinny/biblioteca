@@ -34,6 +34,24 @@ public class LoginController {
 
         if (usuarioLogado != null) {
             exibirAlerta("Sucesso", "Bem-vindo(a), " + usuarioLogado.getNome() + "!");
+
+            view.BibliotecaView bibliotecaView = new view.BibliotecaView();
+
+            BibliotecaController bibliotecaController = new BibliotecaController(bibliotecaView);
+
+            Scene novaCena = new Scene(bibliotecaView);
+
+            try {
+                novaCena.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+            } catch (Exception e) {
+                System.out.println("Aviso: CSS não encontrado para a biblioteca.");
+            }
+
+            Stage janelaAtual = (Stage) view.getScene().getWindow();
+            janelaAtual.setTitle("Sistema de Biblioteca ABA - Gerenciamento de Acervo");
+            janelaAtual.setScene(novaCena);
+            janelaAtual.centerOnScreen(); 
+
         } else {
             exibirAlerta("Erro de Autenticação", "E-mail ou senha incorretos.");
         }
