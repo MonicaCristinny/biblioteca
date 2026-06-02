@@ -13,7 +13,7 @@ public class UsuarioDAO {
     // verifica se o usuario existe
     public Usuarios validarLogin(String email, String senha) {
 
-        String sql = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
+        String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
