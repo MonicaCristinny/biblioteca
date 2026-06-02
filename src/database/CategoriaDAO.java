@@ -1,7 +1,6 @@
 package database;
 
 import model.Categorias;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +13,8 @@ public class CategoriaDAO {
 
     public List<Categorias> listarTodas() {
         List<Categorias> lista = new ArrayList<>();
-        String sql = "SELECT id_categoria, nome FROM categorias ORDER BY nome ASC";
+        // CORRIGIDO: nome para nome_categoria
+        String sql = "SELECT id_categoria, nome_categoria FROM categorias ORDER BY nome_categoria ASC";
 
         try (Connection conn = Database.Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -23,12 +23,11 @@ public class CategoriaDAO {
             while (rs.next()) {
                 Categorias categoria = new Categorias(
                         rs.getInt("id_categoria"),
-                        rs.getString("nome")
+                        rs.getString("nome_categoria") // CORRIGIDO
                 );
                 lista.add(categoria);
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao listar todas as categorias.");
             e.printStackTrace();
         }
         return lista;
@@ -38,10 +37,10 @@ public class CategoriaDAO {
         if (nomeCategoria == null || nomeCategoria.trim().isEmpty()) {
             return 0;
         }
-
         nomeCategoria = nomeCategoria.trim();
 
-        String sqlBuscar = "SELECT id_categoria FROM categorias WHERE LOWER(nome) = LOWER(?)";
+        // CORRIGIDO: nome para nome_categoria
+        String sqlBuscar = "SELECT id_categoria FROM categorias WHERE LOWER(nome_categoria) = LOWER(?)";
 
         try (Connection conn = Database.Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sqlBuscar)) {
@@ -49,7 +48,7 @@ public class CategoriaDAO {
             stmt.setString(1, nomeCategoria);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt("id_categoria"); // Achou a categoria, retorna o ID
+                    return rs.getInt("id_categoria");
                 }
             }
         } catch (SQLException e) {
@@ -57,18 +56,19 @@ public class CategoriaDAO {
             e.printStackTrace();
         }
 
-        String sqlInserir = "INSERT INTO categorias (nome) VALUES (?)";
+        // CORRIGIDO: nome para nome_categoria
+        String sqlInserir = "INSERT INTO categorias (nome_categoria) VALUES (?)";
 
         try (Connection conn = Database.Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sqlInserir, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, nomeCategoria);
-            int linhasAfetadas = stmt.executeUpdate();
+            int lines = stmt.executeUpdate();
 
-            if (linhasAfetadas > 0) {
+            if (lines > 0) {
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        return generatedKeys.getInt(1); // Retorna o ID gerado
+                        return generatedKeys.getInt(1);
                     }
                 }
             }

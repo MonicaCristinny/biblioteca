@@ -1,7 +1,6 @@
 package database;
 
 import model.Autores;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,37 +10,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AutorDAO {
+
     public List<Autores> listarTodos() {
         List<Autores> lista = new ArrayList<>();
-        String sql = "SELECT id_autor, nome FROM autores ORDER BY nome ASC";
+        // CORRIGIDO: nome para nome_autor
+        String sql = "SELECT id_autor, nome_autor FROM autores ORDER BY nome_autor ASC";
 
         try (Connection conn = Database.Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                // Cria o modelo baseado nas colunas do banco
                 Autores autor = new Autores(
                         rs.getInt("id_autor"),
-                        rs.getString("nome")
+                        rs.getString("nome_autor") // CORRIGIDO
                 );
                 lista.add(autor);
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao listar todos os autores.");
             e.printStackTrace();
         }
         return lista;
     }
+
     public int obterOuCadastrarAutor(String nomeAutor) {
         if (nomeAutor == null || nomeAutor.trim().isEmpty()) {
             return 0;
         }
-
         nomeAutor = nomeAutor.trim();
 
-        // 1. Busca se o autor já existe (Case-Insensitive)
-        String sqlBuscar = "SELECT id_autor FROM autores WHERE LOWER(nome) = LOWER(?)";
+        // CORRIGIDO: nome para nome_autor
+        String sqlBuscar = "SELECT id_autor FROM autores WHERE LOWER(nome_autor) = LOWER(?)";
 
         try (Connection conn = Database.Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sqlBuscar)) {
@@ -57,7 +56,8 @@ public class AutorDAO {
             e.printStackTrace();
         }
 
-        String sqlInserir = "INSERT INTO autores (nome) VALUES (?)";
+        // CORRIGIDO: nome para nome_autor
+        String sqlInserir = "INSERT INTO autores (nome_autor) VALUES (?)";
 
         try (Connection conn = Database.Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sqlInserir, Statement.RETURN_GENERATED_KEYS)) {
