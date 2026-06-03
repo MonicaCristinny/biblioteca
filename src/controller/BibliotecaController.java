@@ -4,6 +4,7 @@ import database.LivroDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javafx.scene.control.cell.PropertyValueFactory; // NECESSÁRIO
 import model.Livros;
 import view.BibliotecaView;
 import java.util.List;
@@ -18,6 +19,13 @@ public class BibliotecaController {
         this.view = view;
         this.livroDAO = new LivroDAO();
         this.livrosObservableList = FXCollections.observableArrayList();
+
+        // Configuração das colunas (Mapeamento)
+        this.view.getColId().setCellValueFactory(new PropertyValueFactory<>("id_livro"));
+        this.view.getColTitulo().setCellValueFactory(new PropertyValueFactory<>("titulo"));
+        this.view.getColCategoria().setCellValueFactory(new PropertyValueFactory<>("id_categoria"));
+        this.view.getColAutor().setCellValueFactory(new PropertyValueFactory<>("id_autor"));
+        this.view.getColStatus().setCellValueFactory(new PropertyValueFactory<>("status"));
 
         this.view.getTabelaLivros().setItems(livrosObservableList);
         this.atualizarTabela();
@@ -69,15 +77,10 @@ public class BibliotecaController {
 
     private void handleNovoLivro() {
         view.CadastrarLivroView cadastroLivroView = new view.CadastrarLivroView();
-
         CadastrarLivroController cadastrarLivroController = new CadastrarLivroController(cadastroLivroView);
 
         javafx.scene.Scene novaCena = new javafx.scene.Scene(cadastroLivroView);
-        try {
-            novaCena.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
-        } catch (Exception e) {
-            System.out.println("Aviso: CSS não encontrado para a tela de cadastro de livros.");
-        }
+        // ... (código do CSS igual ao que você já tem)
 
         javafx.stage.Stage janelaAtual = (javafx.stage.Stage) view.getScene().getWindow();
         janelaAtual.setTitle("Sistema de Biblioteca ABA - Cadastrar Novo Livro");
@@ -86,7 +89,7 @@ public class BibliotecaController {
     }
 
     private void exibirAlerta(String titulo, String mensagem) {
-        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensagem);

@@ -3,11 +3,7 @@ package view;
 import components.ComponentFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -15,6 +11,7 @@ import model.Livros;
 
 public class BibliotecaView extends VBox {
 
+    // 1. DECLARAÇÃO DAS VARIÁVEIS (Devem vir primeiro)
     private TextField txtPesquisa;
     private Button btnPesquisar;
     private Button btnEmprestar;
@@ -22,6 +19,7 @@ public class BibliotecaView extends VBox {
     private Button btnNovoLivro;
     private TableView<Livros> tabelaLivros;
 
+    // 2. CONSTRUTOR
     public BibliotecaView() {
         this.setAlignment(Pos.TOP_CENTER);
         this.setSpacing(20.0);
@@ -44,9 +42,9 @@ public class BibliotecaView extends VBox {
         tabelaLivros.setPrefHeight(350);
         tabelaLivros.getStyleClass().add("tabela-livros");
 
-        // organiza colunas da tabela
+        // Criação das colunas
         TableColumn<Livros, Integer> colId = new TableColumn<>("ID");
-        colId.setCellValueFactory(new PropertyValueFactory<>("id_livros"));
+        colId.setCellValueFactory(new PropertyValueFactory<>("id_livro"));
         colId.setPrefWidth(60);
 
         TableColumn<Livros, String> colTitulo = new TableColumn<>("Título");
@@ -79,10 +77,17 @@ public class BibliotecaView extends VBox {
         this.getChildren().addAll(lblTitulo, boxPesquisa, tabelaLivros, boxAcoes);
     }
 
-    public String getPesquisa() { return txtPesquisa.getText(); }
+    // 3. MÉTODOS GETTERS (Devem vir após o construtor)
+    public TableView<Livros> getTabelaLivros() { return tabelaLivros; }
     public Button getBtnPesquisar() { return btnPesquisar; }
     public Button getBtnEmprestar() { return btnEmprestar; }
     public Button getBtnDevolver() { return btnDevolver; }
     public Button getBtnNovoLivro() { return btnNovoLivro; }
-    public TableView<Livros> getTabelaLivros() { return tabelaLivros; }
+    public String getPesquisa() { return txtPesquisa.getText(); }
+
+    public TableColumn<Livros, ?> getColId() { return tabelaLivros.getColumns().get(0); }
+    public TableColumn<Livros, ?> getColTitulo() { return tabelaLivros.getColumns().get(1); }
+    public TableColumn<Livros, ?> getColCategoria() { return tabelaLivros.getColumns().get(2); }
+    public TableColumn<Livros, ?> getColAutor() { return tabelaLivros.getColumns().get(3); }
+    public TableColumn<Livros, ?> getColStatus() { return tabelaLivros.getColumns().get(4); }
 }
